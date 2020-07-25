@@ -4,7 +4,7 @@ class TestTextRecognition < MiniTest::Test
   def setup
     @image_name = 'test/images/4words.png'
     @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name)
-    @recognizer.run
+    # @recognizer.run
   end
 
 
@@ -43,6 +43,7 @@ require 'nokogiri'
 
 
   def test_text_recognition
+    @recognizer.recognize
     assert_equal 'Name Arial Century Peter', @recognizer.utf8_text.strip
   end
 
@@ -61,7 +62,13 @@ hocr = <<HEREDOC
    </div>
   </div>
 HEREDOC
+    @recognizer.recognize
     assert_equal hocr_to_text(hocr), hocr_to_text(@recognizer.hocr_text)
+  end
+
+  def test_rectangle_recognition
+    @recognizer.recognize_rectangle(300, 0, 41, 15)
+    assert_equal 'Peter', @recognizer.utf8_text.strip
   end
 
 end

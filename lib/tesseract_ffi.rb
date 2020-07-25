@@ -16,21 +16,21 @@ module TesseractFFI
   attach_function :tess_end,
     'TessBaseAPIEnd', [:pointer], :int
 
-  attach_function :set_image,
+  attach_function :tess_set_image,
     'TessBaseAPISetImage2', [:pointer,:buffer_in], :int
-  attach_function :recognize,
+  attach_function :tess_recognize,
     'TessBaseAPIRecognize', [:pointer, :int], :int
-  attach_function :pix_read,
+  attach_function :tess_pix_read,
     'pixRead', [:string], :pointer
 
-  attach_function :get_utf8,
+  attach_function :tess_get_utf8,
     'TessBaseAPIGetUTF8Text', [:pointer], :string
-  attach_function :get_hocr,
+  attach_function :tess_get_hocr,
     'TessBaseAPIGetHOCRText', [:pointer], :string
 
-  attach_function :set_rectangle,
+  attach_function :tess_set_rectangle,
     'TessBaseAPISetRectangle',[:pointer,:int,:int,:int,:int], :void
-  attach_function :set_source_resolution,
+  attach_function :tess_set_source_resolution,
     'TessBaseAPISetSourceResolution', [:pointer,:int], :void
-  attach_function :set_output_name, 'TessBaseAPISetOutputName',[:pointer], :void
+  attach_function :tess_set_output_name, 'TessBaseAPISetOutputName',[:pointer], :void
 end
