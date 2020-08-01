@@ -14,7 +14,7 @@ class TestException < MiniTest::Test
     recognizer.expects(:tess_end).with(nil)
 
     assert_raises TesseractFFI::TessException do
-      recognizer.run
+      recognizer.setup_tesseract()
     end
     TesseractFFI.tess_delete(@handle)
     assert_equal 'Tesseract Error Library Error', recognizer.errors
@@ -33,7 +33,7 @@ class TestException < MiniTest::Test
     recognizer.expects(:tess_end).with(@handle)
 
     assert_raises TesseractFFI::TessException do
-      recognizer.run
+      recognizer.setup_tesseract()
     end
     TesseractFFI.tess_delete(@handle)
     assert_equal 'Tesseract Error Init Error', recognizer.errors
@@ -43,7 +43,7 @@ class TestException < MiniTest::Test
   def test_image_error
     @handle = TesseractFFI.tess_create
     @image = TesseractFFI.tess_pix_read(@image_name)
-    @init_result = TesseractFFI.tess_init(@handle, 0, 'eng')
+    @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
     recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
     recognizer.expects(:tess_create).returns(@handle)
@@ -53,7 +53,7 @@ class TestException < MiniTest::Test
     recognizer.expects(:tess_end).with(@handle)
     recognizer.expects(:tess_set_image).returns(1) # error value
     assert_raises TesseractFFI::TessException do
-      recognizer.run
+      recognizer.setup_tesseract()
     end
     TesseractFFI.tess_delete(@handle)
     assert_equal 'Tesseract Error Unable to set image test/images/4words.png', recognizer.errors
@@ -63,7 +63,7 @@ class TestException < MiniTest::Test
   def test_recognize_error
     @handle = TesseractFFI.tess_create
     @image = TesseractFFI.tess_pix_read(@image_name)
-    @init_result = TesseractFFI.tess_init(@handle, 0, 'eng')
+    @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
     recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
     recognizer.expects(:tess_create).returns(@handle)

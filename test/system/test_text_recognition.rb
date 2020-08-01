@@ -71,4 +71,11 @@ HEREDOC
     assert_equal 'Peter', @recognizer.utf8_text.strip
   end
 
+  def test_legacy_text_recognition
+    @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name,oem: TesseractFFI::Legacy)
+    @recognizer.recognize
+    # lower accuracy in legacy mode
+    assert_equal 'Name Arial Century Pemr', @recognizer.utf8_text.strip
+  end
+
 end

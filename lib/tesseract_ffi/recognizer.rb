@@ -6,52 +6,31 @@ module TesseractFFI
     attr_accessor :language, :file_name, :source_resolution
     attr_reader :utf8_text, :hocr_text, :errors
 
-    def initialize(language: 'eng', file_name: 'tesseractffi', source_resolution: 72)
+    def initialize(language: 'eng', file_name: 'tesseractffi', source_resolution: 72, oem: Default)
       @language = language
       @file_name = file_name
       @source_resolution = source_resolution
+      @oem = oem
       @errors = ''
     end
 
-    # def recognize2
-    #   @image = TesseractFFI.pix_read(@file_name)
-    #   @handle = TesseractFFI.create
-        
-    #   if TesseractFFI.init(@handle, 0, @language) > 0 
-    #     raise "Exception: Error initializing tesseract"
-    #   end
-    #   TesseractFFI.set_image(@handle, @image)
-    #   TesseractFFI.set_source_resolution(@handle, @source_resolution)
-
-    #   if TesseractFFI.recognize(@handle, 0) > 0
-    #     raise "Exception: Error in Tesseract recognition"
-    #   end
-
-    #    @utf8_text = TesseractFFI.get_utf8(@handle).encode("UTF-8")
-        
-    #   TesseractFFI.end(@handle)      
-    #   TesseractFFI.delete(@handle)
-    # end
-
-    def run
-      @image = tess_pix_read(@file_name)
+    def setup_tesseract
       begin
         @handle = tess_create
         unless @handle
           raise TessException.new(error_msg: 'Library Error')
         end
-        result = tess_init(@handle, 0, @language)
+        result = tess_init(@handle, 0, @language, @oem)
         if  result != 0 
           raise TessException.new(error_msg: 'Init Error')
         end
 
+        @image = tess_pix_read(@file_name)
         image_status = tess_set_image(@handle, @image) 
         if image_status != 0
           raise TessException.new(error_msg: "Unable to set image #{@file_name}") 
         end
-
-        # recognize
-        yield
+        yield # run the block for either recognition or rectangle
 
       rescue TessException => exception
         @errors << "Tesseract Error #{exception.error[:error_msg]}"
@@ -59,6 +38,7 @@ module TesseractFFI
       ensure
         tess_end(@handle)
         tess_delete(@handle)
+
       end
     end
 
@@ -67,17 +47,17 @@ module TesseractFFI
       if tess_recognize(@handle, 0) != 0
         raise TessException.new(error_msg: 'Recognition Error')
       end
-      text = tess_get_utf8(@handle)
+      text = tess_get_utf8(@handle,0)
       if text
         @utf8_text = text.encode("UTF-8")
       else
         @utf8_text = ''
       end
-      @hocr_text = tess_get_hocr(@handle)
+      @hocr_text = tess_get_hocr(@handle,0)
     end
 
-   def recognize
-      self.run() do
+    def recognize
+      setup_tesseract do
         run_ocr
       end
     end
@@ -87,10 +67,43 @@ module TesseractFFI
     end
 
     def recognize_rectangle(x,y,w,h)
-      self.run() do 
+      setup_tesseract() do  
         set_rectangle(x,y,w,h)
         run_ocr
       end
+    end
+
+    def get_double_variable(var_name)
+      var_value = nil
+      d_ptr = TesseractFFI::FFIDoublePtr.new
+
+      result = tess_get_double_variable(@handle, var_name, d_ptr)
+      if result 
+        var_value = d_ptr[:value]
+      else
+        raise TessException.new(error_msg: 'Unable to get config parameter ' + param_name)
+      end
+      var_value
+    end
+
+    def set_variable(var_name, value)
+      set_result = nil
+      mem_ptr = FFI::MemoryPointer.from_string(value.to_s)
+      result = tess_set_variable(@handle, var_name, mem_ptr)
+      if result
+        set_result = true
+      else
+        raise TessException.new(error_msg: 'Unable to set config parameter ' + param_name)
+      end
+      set_result
+    end
+
+    def oem
+      ocr_engine_mode = nil
+      setup_tesseract do
+        ocr_engine_mode = TesseractFFI.tess_get_oem(@handle)
+      end
+      ocr_engine_mode
     end
 
   end
