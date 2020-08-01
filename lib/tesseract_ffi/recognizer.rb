@@ -81,7 +81,7 @@ module TesseractFFI
       if result 
         var_value = d_ptr[:value]
       else
-        raise TessException.new(error_msg: 'Unable to get config parameter ' + param_name)
+        raise TessException.new(error_msg: 'Unable to get config variable ' + var_name)
       end
       var_value
     end
@@ -93,7 +93,7 @@ module TesseractFFI
       if result
         set_result = true
       else
-        raise TessException.new(error_msg: 'Unable to set config parameter ' + param_name)
+        raise TessException.new(error_msg: 'Unable to set config variable ' + var_name)
       end
       set_result
     end
