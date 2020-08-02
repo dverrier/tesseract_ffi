@@ -1,8 +1,8 @@
 require 'simplecov'
 
 SimpleCov.start do
-  add_group "test-unit", "test/unit"
-  add_group "test-system", "test/system"
+  add_group "unit tests", "test/unit"
+  add_group "system tests", "test/system"
   add_group "lib", "lib/"
 end
   
