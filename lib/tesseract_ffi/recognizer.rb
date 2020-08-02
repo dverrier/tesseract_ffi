@@ -119,9 +119,9 @@ module TesseractFFI
     end
 
     def print_variables_to_file(file_name)
-      result = TesseractFFI.tess_print_to_file(@handle, file_name)
+      result = tess_print_to_file(@handle, file_name)
       unless result
-        raise TessException.new(error_msg: 'Unable to print variable to ' + file_name)
+        raise TessException.new(error_msg: 'Unable to print variables to ' + file_name)
       end
       result
     end

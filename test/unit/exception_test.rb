@@ -149,4 +149,23 @@ class TestException < MiniTest::Test
     assert_equal 'Tesseract Error Unable to set config variable NOTHING', recognizer.errors
   end
 
+  def test_variable_print_error
+    # @handle = TesseractFFI.tess_create
+    # @image = TesseractFFI.tess_pix_read(@image_name)
+    # @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
+
+    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
+    # recognizer.expects(:tess_create).returns(@handle)
+    # recognizer.expects(:tess_delete).with(@handle)
+
+    # recognizer.expects(:tess_init).returns(@init_result)
+    # recognizer.expects(:tess_end).with(@handle)
+    recognizer.expects(:tess_print_to_file).returns(nil)
+    assert_raises TesseractFFI::TessException do
+      recognizer.setup_tesseract{ recognizer.print_variables_to_file('NOTHING')}
+    end
+    # TesseractFFI.tess_delete(@handle)
+    assert_equal 'Tesseract Error Unable to print variables to NOTHING', recognizer.errors
+  end
+
 end
