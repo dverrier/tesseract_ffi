@@ -22,7 +22,7 @@ module TesseractFFI
       @errors = ''
     end
 
-    def setup_tesseract
+    def setup
       begin
         @handle = tess_create
         unless @handle
@@ -65,7 +65,7 @@ module TesseractFFI
     end
 
     def recognize
-      setup_tesseract do
+      setup do
         run_ocr
       end
     end
@@ -75,7 +75,7 @@ module TesseractFFI
     end
 
     def recognize_rectangle(x,y,w,h)
-      setup_tesseract() do  
+      setup() do  
         set_rectangle(x,y,w,h)
         run_ocr
       end
@@ -128,7 +128,7 @@ module TesseractFFI
 
     def oem
       ocr_engine_mode = nil
-      setup_tesseract do
+      setup do
         ocr_engine_mode = TesseractFFI.tess_get_oem(@handle)
       end
       ocr_engine_mode
