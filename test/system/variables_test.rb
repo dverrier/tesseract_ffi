@@ -3,20 +3,20 @@ require 'helper'
 class TestVariable < MiniTest::Test
   def setup
     @image_name = 'test/images/4words.png'
-    @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name)
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name)
   end
 
 
   def test_variable_get_set
     var_name = 'language_model_penalty_non_dict_word'
     desired_value = 0.2
-    @recognizer.setup_tesseract do 
-      old_value = @recognizer.get_double_variable(var_name)
+    @tess.setup_tesseract do 
+      old_value = @tess.get_double_variable(var_name)
       assert_equal 0.15, old_value
 
-      result = @recognizer.set_variable(var_name, desired_value)
+      result = @tess.set_variable(var_name, desired_value)
       assert result
-      new_value = @recognizer.get_double_variable(var_name)
+      new_value = @tess.get_double_variable(var_name)
       assert_equal desired_value, new_value
     end
   end
@@ -25,13 +25,13 @@ class TestVariable < MiniTest::Test
   def test_variable_get_set_int
     var_name = 'editor_image_xpos'
     desired_value = 591
-    @recognizer.setup_tesseract do 
-      old_value = @recognizer.get_integer_variable(var_name)
+    @tess.setup_tesseract do 
+      old_value = @tess.get_integer_variable(var_name)
       assert_equal 590, old_value
 
-      result = @recognizer.set_variable(var_name, desired_value)
+      result = @tess.set_variable(var_name, desired_value)
       assert result
-      new_value = @recognizer.get_integer_variable(var_name)
+      new_value = @tess.get_integer_variable(var_name)
       assert_equal desired_value, new_value
     end
   end
@@ -39,8 +39,8 @@ class TestVariable < MiniTest::Test
   def test_print_variables
     file_name = 'tmp/print.txt'
     File.delete(file_name) if File.exist? file_name
-    @recognizer.setup_tesseract do 
-      @recognizer.print_variables_to_file file_name
+    @tess.setup_tesseract do 
+      @tess.print_variables_to_file file_name
       assert File.exist? file_name
     end
     File.delete file_name

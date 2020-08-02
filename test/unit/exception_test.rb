@@ -7,13 +7,13 @@ class TestException < MiniTest::Test
 
   def test_file_name_not_given
     assert_raises TesseractFFI::TessException do
-      TesseractFFI::Recognizer.new
+      TesseractFFI::Tesseract.new
     end
   end
 
   def test_file_name_not_exist
     assert_raises TesseractFFI::TessException do
-      TesseractFFI::Recognizer.new(file_name: 'toto.png')
+      TesseractFFI::Tesseract.new(file_name: 'toto.png')
     end
   end
 
@@ -21,15 +21,15 @@ class TestException < MiniTest::Test
     @handle = TesseractFFI.tess_create
     @image = TesseractFFI.tess_pix_read(@image_name)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(nil) # error value not a pointer
-    recognizer.expects(:tess_end).with(nil)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(nil) # error value not a pointer
+    tess.expects(:tess_end).with(nil)
 
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract()
+      tess.setup_tesseract()
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Library Error', recognizer.errors
+    assert_equal 'Tesseract Error Library Error', tess.errors
   end
 
   def test_init_error
@@ -37,18 +37,18 @@ class TestException < MiniTest::Test
     @image = TesseractFFI.tess_pix_read(@image_name)
     # @init_result = TesseractFFI.tess_init(@handle, 0, 'eng')
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(1) # error value
-    recognizer.expects(:tess_end).with(@handle)
+    tess.expects(:tess_init).returns(1) # error value
+    tess.expects(:tess_end).with(@handle)
 
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract()
+      tess.setup_tesseract()
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Init Error', recognizer.errors
+    assert_equal 'Tesseract Error Init Error', tess.errors
   end
 
 
@@ -57,18 +57,18 @@ class TestException < MiniTest::Test
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(1) # error value
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(1) # error value
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract()
+      tess.setup_tesseract()
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to set image test/images/4words.png', recognizer.errors
+    assert_equal 'Tesseract Error Unable to set image test/images/4words.png', tess.errors
   end
 
 
@@ -77,19 +77,19 @@ class TestException < MiniTest::Test
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
-    recognizer.expects(:tess_recognize).with(@handle, 0).returns(-1)
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_recognize).with(@handle, 0).returns(-1)
     assert_raises TesseractFFI::TessException do
-      recognizer.recognize
+      tess.recognize
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Recognition Error', recognizer.errors
+    assert_equal 'Tesseract Error Recognition Error', tess.errors
   end
 
   def test_variable_get_double_error
@@ -97,18 +97,18 @@ class TestException < MiniTest::Test
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract {recognizer.get_double_variable('NOTHING')}
+      tess.setup_tesseract {tess.get_double_variable('NOTHING')}
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to get config variable NOTHING', recognizer.errors
+    assert_equal 'Tesseract Error Unable to get config variable NOTHING', tess.errors
   end
 
   def test_variable_get_int_error
@@ -116,18 +116,18 @@ class TestException < MiniTest::Test
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract {recognizer.get_integer_variable('NOTHING')}
+      tess.setup_tesseract {tess.get_integer_variable('NOTHING')}
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to get config variable NOTHING', recognizer.errors
+    assert_equal 'Tesseract Error Unable to get config variable NOTHING', tess.errors
   end
 
   def test_variable_set_error
@@ -135,37 +135,27 @@ class TestException < MiniTest::Test
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract {recognizer.set_variable('NOTHING', '22')}
+      tess.setup_tesseract {tess.set_variable('NOTHING', '22')}
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to set config variable NOTHING', recognizer.errors
+    assert_equal 'Tesseract Error Unable to set config variable NOTHING', tess.errors
   end
 
   def test_variable_print_error
-    # @handle = TesseractFFI.tess_create
-    # @image = TesseractFFI.tess_pix_read(@image_name)
-    # @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
-
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    # recognizer.expects(:tess_create).returns(@handle)
-    # recognizer.expects(:tess_delete).with(@handle)
-
-    # recognizer.expects(:tess_init).returns(@init_result)
-    # recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_print_to_file).returns(nil)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_print_to_file).returns(nil)
     assert_raises TesseractFFI::TessException do
-      recognizer.setup_tesseract{ recognizer.print_variables_to_file('NOTHING')}
+      tess.setup_tesseract{ tess.print_variables_to_file('NOTHING')}
     end
-    # TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to print variables to NOTHING', recognizer.errors
+    assert_equal 'Tesseract Error Unable to print variables to NOTHING', tess.errors
   end
 
 end

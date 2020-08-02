@@ -1,6 +1,6 @@
 require 'ffi'
 require 'tesseract_ffi/version'
-require 'tesseract_ffi/recognizer'
+require 'tesseract_ffi/tesseract'
 require 'tesseract_ffi/tess_exception'
 
 

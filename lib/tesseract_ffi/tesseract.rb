@@ -1,5 +1,5 @@
 module TesseractFFI
-  class Recognizer
+  class Tesseract
 
     include TesseractFFI
 
@@ -125,7 +125,6 @@ module TesseractFFI
       end
       result
     end
-
 
     def oem
       ocr_engine_mode = nil

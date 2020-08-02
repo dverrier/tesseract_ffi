@@ -32,119 +32,119 @@ class TestAPI < MiniTest::Test
     assert (TesseractFFI.respond_to? :tess_process_pages)
   end
 
-  def test_recognizer_defaults
-    recognizer = TesseractFFI::Recognizer.new(file_name: 'test/images/4words.png')
-    assert_equal 'eng', recognizer.language
-    assert_equal 'test/images/4words.png',  recognizer.file_name
-    assert_equal 72, recognizer.source_resolution
+  def test_tess_defaults
+    tess = TesseractFFI::Tesseract.new(file_name: 'test/images/4words.png')
+    assert_equal 'eng', tess.language
+    assert_equal 'test/images/4words.png',  tess.file_name
+    assert_equal 72, tess.source_resolution
   end
 
-  def test_recognizer_configuration
-    recognizer = TesseractFFI::Recognizer.new(
+  def test_Tess_configuration
+    tess = TesseractFFI::Tesseract.new(
       language:'deu', 
       file_name: 'test/images/4words.png', 
       source_resolution:96)
-    assert recognizer
-    assert_equal 'deu', recognizer.language
-    assert_equal 'test/images/4words.png', recognizer.file_name
-    assert_equal 96, recognizer.source_resolution
+    assert tess
+    assert_equal 'deu', tess.language
+    assert_equal 'test/images/4words.png', tess.file_name
+    assert_equal 96, tess.source_resolution
   end
 
-  def test_recognizer_run_text
+  def test_tesseract_run_text
     @handle = TesseractFFI.tess_create
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng+lav',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
-    recognizer.expects(:tess_set_source_resolution)
-    # recognizer.expects(:tess_recognize).with(@handle, 0).returns(0)
-    recognizer.expects(:tess_get_utf8).with(@handle,0).returns('ABCD')
-    assert_equal 'eng+lav', recognizer.tess_get_init_languages_as_string(@handle)
-    recognizer.recognize
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_set_source_resolution)
+    # tess.expects(:tess_recognize).with(@handle, 0).returns(0)
+    tess.expects(:tess_get_utf8).with(@handle,0).returns('ABCD')
+    assert_equal 'eng+lav', tess.tess_get_init_languages_as_string(@handle)
+    tess.recognize
     TesseractFFI.tess_delete(@handle)
-    assert_equal '', recognizer.errors
-    assert_equal 'ABCD', recognizer.utf8_text
+    assert_equal '', tess.errors
+    assert_equal 'ABCD', tess.utf8_text
   end
 
-  def test_recognizer_run_hocr
+  def test_tess_run_hocr
     @handle = TesseractFFI.tess_create
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng',3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
-    recognizer.expects(:tess_set_source_resolution)
-    recognizer.expects(:tess_recognize).with(@handle, 0).returns(0)
-    recognizer.expects(:tess_get_hocr).with(@handle,0).returns('<html></html>')
-    recognizer.recognize
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_set_source_resolution)
+    tess.expects(:tess_recognize).with(@handle, 0).returns(0)
+    tess.expects(:tess_get_hocr).with(@handle,0).returns('<html></html>')
+    tess.recognize
     TesseractFFI.tess_delete(@handle)
-    assert_equal '', recognizer.errors
-    assert_equal '<html></html>', recognizer.hocr_text
+    assert_equal '', tess.errors
+    assert_equal '<html></html>', tess.hocr_text
   end
 
 
-  def test_recognizer_run_rectangle
+  def test_tess_run_rectangle
     @handle = TesseractFFI.tess_create
     @image = TesseractFFI.tess_pix_read(@image_name)
     @init_result = TesseractFFI.tess_init(@handle, 0, 'eng', 3)
 
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.expects(:tess_create).returns(@handle)
-    recognizer.expects(:tess_delete).with(@handle)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.expects(:tess_create).returns(@handle)
+    tess.expects(:tess_delete).with(@handle)
 
-    recognizer.expects(:tess_init).returns(@init_result)
-    recognizer.expects(:tess_end).with(@handle)
-    recognizer.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
-    recognizer.expects(:tess_set_source_resolution)
-    recognizer.expects(:tess_recognize).with(@handle, 0).returns(0)
-    recognizer.expects(:tess_set_rectangle).with(@handle,1,2,3,4)
-    recognizer.expects(:tess_get_hocr).with(@handle,0).returns('<html></html>')
+    tess.expects(:tess_init).returns(@init_result)
+    tess.expects(:tess_end).with(@handle)
+    tess.expects(:tess_set_image).returns(TesseractFFI.tess_set_image(@handle, @image))
+    tess.expects(:tess_set_source_resolution)
+    tess.expects(:tess_recognize).with(@handle, 0).returns(0)
+    tess.expects(:tess_set_rectangle).with(@handle,1,2,3,4)
+    tess.expects(:tess_get_hocr).with(@handle,0).returns('<html></html>')
 
-    recognizer.recognize_rectangle(1,2,3,4)
+    tess.recognize_rectangle(1,2,3,4)
     TesseractFFI.tess_delete(@handle)
-    assert_equal '', recognizer.errors
-    assert_equal '<html></html>', recognizer.hocr_text
+    assert_equal '', tess.errors
+    assert_equal '<html></html>', tess.hocr_text
   end
 
   def test_get_double_variable
     var_name = 'language_model_penalty_non_dict_word'
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.setup_tesseract do 
-      var_value = recognizer.get_double_variable(var_name) 
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.setup_tesseract do 
+      var_value = tess.get_double_variable(var_name) 
       assert_equal '0.15', var_value.to_s
-      assert_equal '', recognizer.errors
+      assert_equal '', tess.errors
     end
   end
 
   def test_set_double_variable
     var_name = 'language_model_penalty_non_dict_word'
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    recognizer.setup_tesseract do
-      result = recognizer.set_variable(var_name, '0.2') 
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    tess.setup_tesseract do
+      result = tess.set_variable(var_name, '0.2') 
       assert result
-      assert_equal '', recognizer.errors
+      assert_equal '', tess.errors
     end
   end
 
   def test_oem
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name)
-    assert_equal TesseractFFI::Default, recognizer.oem
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name, oem: TesseractFFI::Legacy)
-    assert_equal 0, recognizer.oem
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name, oem: TesseractFFI::LTSM)
-    assert_equal 1, recognizer.oem
-    recognizer =  TesseractFFI::Recognizer.new(file_name: @image_name, oem: TesseractFFI::Legacy_LTSM)
-    assert_equal 2, recognizer.oem
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
+    assert_equal TesseractFFI::Default, tess.oem
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy)
+    assert_equal 0, tess.oem
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LTSM)
+    assert_equal 1, tess.oem
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy_LTSM)
+    assert_equal 2, tess.oem
   end
 end

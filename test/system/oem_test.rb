@@ -8,22 +8,22 @@ class OEMTest < MiniTest::Test
 
 
   def test_set_default_oem
-    @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name)
-    assert_equal TesseractFFI::Default, @recognizer.oem 
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name)
+    assert_equal TesseractFFI::Default, @tess.oem 
   end
 
   def test_set_legacy_oem
-    @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name, oem: TesseractFFI::Legacy)
-    assert_equal TesseractFFI::Legacy, @recognizer.oem 
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy)
+    assert_equal TesseractFFI::Legacy, @tess.oem 
   end
 
   def test_set_ltsm_oem
-    @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name, oem: TesseractFFI::LTSM)
-    assert_equal TesseractFFI::LTSM, @recognizer.oem 
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LTSM)
+    assert_equal TesseractFFI::LTSM, @tess.oem 
   end
 
   def test_set_legacy_ltsm_oem
-    @recognizer = TesseractFFI::Recognizer.new(file_name: @image_name, oem: TesseractFFI::Legacy_LTSM)
-    assert_equal TesseractFFI::Legacy_LTSM, @recognizer.oem 
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy_LTSM)
+    assert_equal TesseractFFI::Legacy_LTSM, @tess.oem 
   end
 end
