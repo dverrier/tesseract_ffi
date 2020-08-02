@@ -4,7 +4,6 @@ require 'tesseract_ffi/recognizer'
 require 'tesseract_ffi/tess_exception'
 
 
-
 module TesseractFFI
   extend FFI::Library
 
@@ -13,6 +12,7 @@ module TesseractFFI
   LTSM = 1
   Legacy_LTSM = 2
   Default = 3
+
   class FFIIntPtr < FFI::Struct
     layout  :value, :int
   end

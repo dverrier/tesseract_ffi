@@ -6,9 +6,17 @@ module TesseractFFI
     attr_accessor :language, :file_name, :source_resolution
     attr_reader :utf8_text, :hocr_text, :errors
 
-    def initialize(language: 'eng', file_name: 'tesseractffi', source_resolution: 72, oem: Default)
+    def initialize(file_name: nil, language: 'eng', source_resolution: 72, oem: Default)
       @language = language
-      @file_name = file_name
+      if file_name
+        if File.exist? file_name
+          @file_name = file_name
+        else 
+          raise TessException.new( error_msg: "File #{file_name} not found")
+        end
+      else
+        raise TessException.new(error_msg: 'file_name must be provided')
+      end
       @source_resolution = source_resolution
       @oem = oem
       @errors = ''
@@ -86,6 +94,18 @@ module TesseractFFI
       var_value
     end
 
+    def get_integer_variable(var_name)
+      var_value = nil
+      i_ptr = TesseractFFI::FFIIntPtr.new
+      result = tess_get_int_variable(@handle, var_name, i_ptr)
+      if result 
+        var_value = i_ptr[:value]
+      else
+        raise TessException.new(error_msg: 'Unable to get config variable ' + var_name)
+      end
+      var_value
+    end
+
     def set_variable(var_name, value)
       set_result = nil
       mem_ptr = FFI::MemoryPointer.from_string(value.to_s)
@@ -97,6 +117,15 @@ module TesseractFFI
       end
       set_result
     end
+
+    def print_variables_to_file(file_name)
+      result = TesseractFFI.tess_print_to_file(@handle, file_name)
+      unless result
+        raise TessException.new(error_msg: 'Unable to print variable to ' + file_name)
+      end
+      result
+    end
+
 
     def oem
       ocr_engine_mode = nil

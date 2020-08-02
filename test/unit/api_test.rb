@@ -33,18 +33,20 @@ class TestAPI < MiniTest::Test
   end
 
   def test_recognizer_defaults
-    recognizer = TesseractFFI::Recognizer.new
-    assert recognizer
+    recognizer = TesseractFFI::Recognizer.new(file_name: 'test/images/4words.png')
     assert_equal 'eng', recognizer.language
-    assert_equal 'tesseractffi', recognizer.file_name
+    assert_equal 'test/images/4words.png',  recognizer.file_name
     assert_equal 72, recognizer.source_resolution
   end
 
   def test_recognizer_configuration
-    recognizer = TesseractFFI::Recognizer.new(language:'deu', file_name: 'toto.png', source_resolution:96)
+    recognizer = TesseractFFI::Recognizer.new(
+      language:'deu', 
+      file_name: 'test/images/4words.png', 
+      source_resolution:96)
     assert recognizer
     assert_equal 'deu', recognizer.language
-    assert_equal 'toto.png', recognizer.file_name
+    assert_equal 'test/images/4words.png', recognizer.file_name
     assert_equal 96, recognizer.source_resolution
   end
 

@@ -22,4 +22,28 @@ class TestVariable < MiniTest::Test
   end
 
 
+  def test_variable_get_set_int
+    var_name = 'editor_image_xpos'
+    desired_value = 591
+    @recognizer.setup_tesseract do 
+      old_value = @recognizer.get_integer_variable(var_name)
+      assert_equal 590, old_value
+
+      result = @recognizer.set_variable(var_name, desired_value)
+      assert result
+      new_value = @recognizer.get_integer_variable(var_name)
+      assert_equal desired_value, new_value
+    end
+  end
+
+  def test_print_variables
+    file_name = 'tmp/print.txt'
+    File.delete(file_name) if File.exist? file_name
+    @recognizer.setup_tesseract do 
+      @recognizer.print_variables_to_file file_name
+      assert File.exist? file_name
+    end
+    File.delete file_name
+  end
+
 end
