@@ -1,7 +1,9 @@
 require 'ffi'
 require 'tesseract_ffi/version'
+require 'tesseract_ffi/conf_vars' # mix-in
 require 'tesseract_ffi/tesseract'
 require 'tesseract_ffi/tess_exception'
+
 
 
 module TesseractFFI
