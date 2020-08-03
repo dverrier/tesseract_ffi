@@ -3,6 +3,7 @@ module TesseractFFI
 
     include TesseractFFI  
     include ConfVars
+    include OEM
 
     attr_accessor :language, :file_name, :source_resolution
     attr_reader :utf8_text, :hocr_text, :errors
@@ -39,7 +40,7 @@ module TesseractFFI
         if image_status != 0
           raise TessException.new(error_msg: "Unable to set image #{@file_name}") 
         end
-        yield # run the block for either recognition or rectangle
+        yield # run the block for recognition etc
 
       rescue TessException => exception
         @errors << "Tesseract Error #{exception.error[:error_msg]}"
@@ -47,27 +48,33 @@ module TesseractFFI
       ensure
         tess_end(@handle)
         tess_delete(@handle)
-
       end
     end
 
-    def run_ocr
+    def ocr
       tess_set_source_resolution(@handle, @source_resolution)
       if tess_recognize(@handle, 0) != 0
         raise TessException.new(error_msg: 'Recognition Error')
       end
+      @utf8_text = ''
       text = tess_get_utf8(@handle,0)
       if text
         @utf8_text = text.encode("UTF-8")
-      else
-        @utf8_text = ''
       end
       @hocr_text = tess_get_hocr(@handle,0)
     end
 
     def recognize
       setup do
-        run_ocr
+        ocr
+      end
+    end
+
+    def convert_to_pdf(output_stem)
+      setup() do
+        datapath = TesseractFFI.tess_get_datapath(@handle)
+        pdf_renderer = TesseractFFI.tess_pdf_renderer_create(output_stem, datapath, false)
+        TesseractFFI.tess_process_pages(@handle, @file_name, nil, 5000, pdf_renderer)
       end
     end
 
@@ -78,16 +85,8 @@ module TesseractFFI
     def recognize_rectangle(x,y,w,h)
       setup() do  
         set_rectangle(x,y,w,h)
-        run_ocr
+        ocr
       end
-    end
-
-    def oem
-      ocr_engine_mode = nil
-      setup do
-        ocr_engine_mode = TesseractFFI.tess_get_oem(@handle)
-      end
-      ocr_engine_mode
     end
 
   end

@@ -117,25 +117,6 @@ class TestAPI < MiniTest::Test
     assert_equal '<html></html>', tess.hocr_text
   end
 
-  def test_get_double_variable
-    var_name = 'language_model_penalty_non_dict_word'
-    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
-    tess.setup do 
-      var_value = tess.get_double_variable(var_name) 
-      assert_equal '0.15', var_value.to_s
-      assert_equal '', tess.errors
-    end
-  end
-
-  def test_set_double_variable
-    var_name = 'language_model_penalty_non_dict_word'
-    tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
-    tess.setup do
-      result = tess.set_variable(var_name, '0.2') 
-      assert result
-      assert_equal '', tess.errors
-    end
-  end
 
   def test_oem
     tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
