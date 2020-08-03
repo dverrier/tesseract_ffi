@@ -42,13 +42,13 @@ Or install it yourself as:
 ## Usage
 The fastest way to get going is to use the high-level functions that will probably suit most people , most of the time.
 
-###To convert an image to a string
+#### To convert an image to a string
 ```ruby
 require 'tesseract_ffi'
 
 TesseractFFI.to_text('my_image.png')
 ```
-###To convert an image to a searchable PDF file
+#### To convert an image to a searchable PDF file
 ```ruby
 require 'tesseract_ffi'
 TesseractFFI.to_pdf('my_image.png', 'output_file')
@@ -66,9 +66,9 @@ tess.recognize
 text = tess.utf8_text
 ```
 
-## The generate HOCR 
+## To Generate HOCR 
 Wikipedia says HOCR 'is an open standard of data representation for formatted text 
-obtained from optical character recognition (OCR).  Tesseract can generate the bounding boxes of the words, the lines, the paragraphs on a page.
+obtained from optical character recognition (OCR)'.  Tesseract can produce it and generate the bounding boxes of the words, the lines, the paragraphs on a page.
 
 ```ruby
 require 'tesseract_ffi'
@@ -94,7 +94,7 @@ text = tess.hocr_text
   </div>
 ```
 
-###Recognise Part of an Image
+##Recognise Part of an Image
 ```ruby
 require 'tesseract_ffi'
 tess = TesseractFFI::Tesseract.new( 
