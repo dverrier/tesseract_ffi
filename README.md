@@ -3,11 +3,13 @@
 Welcome to Tesseract_FFI! 
 This is a ruby wrapper to the Tesseract library. Before installing this gem, make sure that Tesseract runs. For example, run the command 
 
-```tesseract --version
+```ruby
+tesseract --version
 ```
 
 and under Linux, etc you should see something like
-```tesseract 4.1.1-rc2-25-g9707
+```ruby
+tesseract 4.1.1-rc2-25-g9707
  leptonica-1.78.0
   libgif 5.1.4 : libjpeg 8d (libjpeg-turbo 1.4.2) : libpng 1.2.54 : libtiff 4.0.6 : zlib 1.2.8 : libwebp 0.4.4 : libopenjp2 2.3.0
  Found AVX2
@@ -45,11 +47,24 @@ TesseractFFI.to_text('my_image.png')
 ```
 or 
 ```ruby
-gem 'tesseract_ffi'
+require 'tesseract_ffi'
 TesseractFFI.to_pdf('my_image.png', 'output_file')
 ```
 
 If you look under the hood, there are lots of intermediate ruby methods that do most things, and some very low level functions that make calls to the C-API of Tesseract using the wonderful FFI library. The low level functions give alarming error messages and often stack dump if called in the wrong order, so they are not for the feint of heart. But if your screen allows to scroll back 1000 lines, you can usually see where the call to Tesseract went wrong.
+
+When the default 'recognition  of English' is not suitable, you can change it (make sure that you have the corresponding language recognition libraries installed:
+```ruby
+require 'tesseract_ffi'
+tess = TesseractFFI::Tesseract.new(
+      language:'deu', 
+      file_name: 'test/images/4words.png', 
+      source_resolution:96)
+tess.recognize
+text = tess.utf8_text
+```
+
+
 
 
 ## Development
@@ -69,4 +84,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Tessy project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/tessy/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Tesseract_FFI project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/tessy/blob/master/CODE_OF_CONDUCT.md).
