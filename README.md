@@ -55,17 +55,15 @@ TesseractFFI.to_pdf('my_image.png', 'output_file')
 ```
 
 ## Languages
-When the default 'recognition  of English' is not suitable, you can change it. The abreviations used for some common lngauages are
+When the default 'recognition  of English' is not suitable, you can change it. The abreviations used for some common European languages are
 
-
-deu - German
-eng - English
-fra - French
-ita - Italian
-nld - Dutch
-por - Portuguese
-spa - Spanish
-vie - Vietnamese
+* deu - German
+* eng - English
+* fra - French
+* ita - Italian
+* nld - Dutch
+* por - Portuguese
+* spa - Spanish
 
 but Tesseract itself supports many, many languages including but not limited to chi_sim (Chinese simplified), chi_tra (Chinese traditional), chr (Cherokee), cym (Welsh), frk (Frankish), frm (French, Middle, ca.1400-1600). Just ensure that you have the corresponding Tesseract language recognition libraries installed. The best way to confirm this is directly from the command line. For example, to ensure that French recognition files are available to tesseract, type this command to recognise a test image in French
 ```bash
