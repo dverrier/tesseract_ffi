@@ -1,6 +1,6 @@
 module TesseractFFI
-  def self.to_text(file_name)
-    t = Tesseract.new(file_name: file_name)
+  def self.to_text(file_name, language = 'eng')
+    t = Tesseract.new(file_name: file_name, language: language)
     t.recognize
     t.utf8_text
   end

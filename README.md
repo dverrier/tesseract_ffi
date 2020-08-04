@@ -54,14 +54,36 @@ require 'tesseract_ffi'
 TesseractFFI.to_pdf('my_image.png', 'output_file')
 ```
 
-If you look under the hood, there are lots of intermediate ruby methods that do most things, and some very low level functions that make calls to the C-API of Tesseract using the wonderful FFI library. The low level functions give alarming error messages and often stack dump if called in the wrong order, so they are not for the feint of heart. But if your screen allows to scroll back 1000 lines, you can usually see where the call to Tesseract went wrong.
+## Languages
+When the default 'recognition  of English' is not suitable, you can change it. The abreviations used for some common lngauages are
 
-When the default 'recognition  of English' is not suitable, you can change it (make sure that you have the corresponding language recognition libraries installed:
+
+deu - German
+eng - English
+fra - French
+ita - Italian
+nld - Dutch
+por - Portuguese
+spa - Spanish
+vie - Vietnamese
+
+but Tesseract itself supports many, many languages including but not limited to chi_sim (Chinese simplified), chi_tra (Chinese traditional), chr (Cherokee), cym (Welsh), frk (Frankish), frm (French, Middle, ca.1400-1600). Just ensure that you have the corresponding Tesseract language recognition libraries installed. The best way to confirm this is directly from the command line. For example, to ensure that French recognition files are available to tesseract, type this command to recognise a test image in French
+```bash
+tesseract imagename.png  mytext -l fra
+```
+To call from within a ruby file, the following snippet should work for an image in German:
+```ruby
+require 'tesseract_ffi'
+
+TesseractFFI.to_text('my_image.png', 'deu')
+```
+or by creating Ruby objects:
+
 ```ruby
 require 'tesseract_ffi'
 tess = TesseractFFI::Tesseract.new(
-      language:'deu', 
-      file_name: 'test/images/4words.png')
+      language:'fra', 
+      file_name: 'test/images/bonjour.png')
 tess.recognize
 text = tess.utf8_text
 ```
@@ -94,12 +116,11 @@ text = tess.hocr_text
   </div>
 ```
 
-##Recognise Part of an Image
+## Recognise Part of an Image
 ```ruby
 require 'tesseract_ffi'
 tess = TesseractFFI::Tesseract.new( 
-      file_name: 'test/images/4words.png', 
-      source_resolution:96)
+      file_name: 'test/images/4words.png')
 
 # tess.recognize_rectangle(x,y,w,h)
 tess.recognize_rectangle(300, 0, 41, 15)
@@ -107,6 +128,40 @@ text = tess.utf8_text
 # => "Peter"
 
 ```
+
+## General Structure 
+
+Create a TesseractFFI::Tesseract object specifying the image file, the language(s) and, optionally the source resolution (dpi of the image) and the OCR Engine Mode, OEM. The default is to use the latest mode, which uses a neural network for the recognition. For some purposes, such as typeface/font recognition, it can be desirable to use the legacy mode even though the recognition is not usually as good.
+
+```ruby
+require 'tesseract_ffi'
+tess = TesseractFFI::Tesseract.new( 
+      file_name: 'test/images/4words.png', 
+      source_resolution:96)
+
+```
+Then call Tesseract.setup with the desired methods in a block.
+
+```ruby
+
+tess.setup do
+  tess.set_rectangle(300, 0, 40, 20)
+  tess.ocr
+  puts tess.utf8_text
+  # => Peter
+  tess.set_rectangle(0, 0, 340, 17)
+  tess.ocr
+  puts tess.utf8_text
+  # => Name Arial Century Peter
+end
+
+```
+
+
+## Low Level Calls
+
+If you look under the hood, there are intermediate ruby methods that do most things, and some very low level functions that make calls to the C-API of Tesseract using the wonderful FFI library. The low level functions give alarming error messages and often stack dump if called in the wrong order, so they are not for the feint of heart. But if your screen allows to scroll back 1000 lines, you can usually see where the call to Tesseract went wrong. This gem aims to hide the complexity of the direct calls to the C library. The examples directory includes a couple of files that show the way to proceed at the different levels of complexity and the tests show more usage.
+
 
 ## Development
 

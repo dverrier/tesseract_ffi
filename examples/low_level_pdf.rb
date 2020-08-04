@@ -1,3 +1,6 @@
+# execute from the top-level directory to get the 
+# path to the image correct
+
 require 'tesseract_ffi'
 #
 # This example shows how to use the low-level functions directly
