@@ -6,6 +6,8 @@ gem 'ffi'
 group :dev, :test do
   gem 'awesome_print'
   gem 'rdoc'
+  gem 'hocr_reader'
+  
 end
 
 group :test do

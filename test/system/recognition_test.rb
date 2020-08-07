@@ -7,40 +7,7 @@ class TestTextRecognition < MiniTest::Test
     # @recognizer.run
   end
 
-
-
-
-require 'nokogiri'
-  def hocr_to_text(str)
-    html = Nokogiri::HTML(str)
-    extract_words_from_html(html)
-  end
-
-  def extract_words_from_html(html)
-    pos_info_words = []
-
-    html.css('span.ocrx_word, span.ocr_word')
-        .reject { |word| word.text.strip.empty? }
-        .each do |word|
-      word_attributes = word.attributes['title'].value.to_s
-                            .delete(';').split(' ')
-      pos_info_word = word_info(word, word_attributes)
-      pos_info_words.push pos_info_word
-    end
-    pos_info_words
-  end
-
-
-  def word_info(word, data)
-    {
-      word: word.text,
-      x_start: data[1].to_i,
-      y_start: data[2].to_i,
-      x_end: data[3].to_i,
-      y_end: data[4].to_i
-    }
-  end
-
+  require 'hocr_reader'
 
   def test_text_recognition
     @tess.recognize
@@ -63,7 +30,9 @@ hocr = <<HEREDOC
   </div>
 HEREDOC
     @tess.recognize
-    assert_equal hocr_to_text(hocr), hocr_to_text(@tess.hocr_text)
+    r = HocrReader::Reader.new(@tess.hocr_text)
+    r.to_words
+    assert_equal "Name Arial Century Peter ", r.convert_to_string
   end
 
   def test_rectangle_recognition
