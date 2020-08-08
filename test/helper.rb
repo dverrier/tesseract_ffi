@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 
 SimpleCov.start do
-  add_group "unit tests", "test/unit"
-  add_group "system tests", "test/system"
-  add_group "lib", "lib/"
+  add_group 'unit tests', 'test/unit'
+  add_group 'system tests', 'test/system'
+  add_group 'lib', 'lib/'
 end
-  
 
 require 'bundler'
 begin

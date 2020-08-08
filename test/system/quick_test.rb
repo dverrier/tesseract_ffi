@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class TestQuick < MiniTest::Test
@@ -17,9 +19,8 @@ class TestQuick < MiniTest::Test
     File.delete(out_file_name) if File.exist?(out_file_name)
 
     TesseractFFI.to_pdf(@image_name, out_file_root)
-    
-    assert File.exist?(out_file_name)
-    File.delete(out_file_name) if File.exist?(out_file_name )
-  end
 
+    assert File.exist?(out_file_name)
+    File.delete(out_file_name) if File.exist?(out_file_name)
+  end
 end

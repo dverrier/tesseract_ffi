@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class TestPDF < MiniTest::Test
@@ -13,7 +15,6 @@ class TestPDF < MiniTest::Test
     @tess = TesseractFFI::Tesseract.new(file_name: @image_name)
     @tess.convert_to_pdf out_file_root
     assert File.exist?(out_file_name)
-    File.delete(out_file_name) if File.exist?(out_file_name )
+    File.delete(out_file_name) if File.exist?(out_file_name)
   end
-
 end
