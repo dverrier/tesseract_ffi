@@ -9,12 +9,12 @@ class OEMTest < MiniTest::Test
 
   def test_set_default_oem
     @tess = TesseractFFI::Tesseract.new(file_name: @image_name)
-    assert_equal TesseractFFI::Default, @tess.oem 
+    assert_equal TesseractFFI::DEFAULT, @tess.oem 
   end
 
   def test_set_legacy_oem
-    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy)
-    assert_equal TesseractFFI::Legacy, @tess.oem 
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LEGACY)
+    assert_equal TesseractFFI::LEGACY, @tess.oem 
   end
 
   def test_set_ltsm_oem
@@ -23,7 +23,7 @@ class OEMTest < MiniTest::Test
   end
 
   def test_set_legacy_ltsm_oem
-    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy_LTSM)
-    assert_equal TesseractFFI::Legacy_LTSM, @tess.oem 
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LEGACY_LTSM)
+    assert_equal TesseractFFI::LEGACY_LTSM, @tess.oem 
   end
 end

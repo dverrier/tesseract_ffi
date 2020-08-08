@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# module TesseractFFI Quick API
 module TesseractFFI
   def self.to_text(file_name, language = 'eng')
     t = Tesseract.new(file_name: file_name, language: language)

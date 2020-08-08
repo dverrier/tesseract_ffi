@@ -29,7 +29,7 @@ class TestException < MiniTest::Test
       tess.setup()
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Library Error', tess.errors
+    assert_equal ['Tesseract Error Library Error'], tess.errors
   end
 
   def test_init_error
@@ -48,7 +48,7 @@ class TestException < MiniTest::Test
       tess.setup()
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Init Error', tess.errors
+    assert_equal ['Tesseract Error Init Error'], tess.errors
   end
 
 
@@ -68,7 +68,7 @@ class TestException < MiniTest::Test
       tess.setup()
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to set image test/images/4words.png', tess.errors
+    assert_equal ['Tesseract Error Unable to set image test/images/4words.png'], tess.errors
   end
 
 
@@ -89,7 +89,7 @@ class TestException < MiniTest::Test
       tess.recognize
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Recognition Error', tess.errors
+    assert_equal ['Tesseract Error Recognition Error'], tess.errors
   end
 
   def test_variable_get_double_error
@@ -108,7 +108,7 @@ class TestException < MiniTest::Test
       tess.setup {tess.get_double_variable('NOTHING')}
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to get config variable NOTHING', tess.errors
+    assert_equal ['Tesseract Error Unable to get config variable NOTHING'], tess.errors
   end
 
   def test_variable_get_int_error
@@ -127,7 +127,7 @@ class TestException < MiniTest::Test
       tess.setup {tess.get_integer_variable('NOTHING')}
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to get config variable NOTHING', tess.errors
+    assert_equal ['Tesseract Error Unable to get config variable NOTHING'], tess.errors
   end
 
   def test_variable_set_error
@@ -146,7 +146,7 @@ class TestException < MiniTest::Test
       tess.setup {tess.set_variable('NOTHING', '22')}
     end
     TesseractFFI.tess_delete(@handle)
-    assert_equal 'Tesseract Error Unable to set config variable NOTHING', tess.errors
+    assert_equal ['Tesseract Error Unable to set config variable NOTHING'], tess.errors
   end
 
   def test_variable_print_error
@@ -155,7 +155,7 @@ class TestException < MiniTest::Test
     assert_raises TesseractFFI::TessException do
       tess.setup{ tess.print_variables_to_file('NOTHING')}
     end
-    assert_equal 'Tesseract Error Unable to print variables to NOTHING', tess.errors
+    assert_equal ['Tesseract Error Unable to print variables to NOTHING'], tess.errors
   end
 
 end

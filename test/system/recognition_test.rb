@@ -41,7 +41,7 @@ HEREDOC
   end
 
   def test_legacy_text_recognition
-    @tess = TesseractFFI::Tesseract.new(file_name: @image_name,oem: TesseractFFI::Legacy)
+    @tess = TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LEGACY)
     @tess.recognize
     # lower accuracy in legacy mode
     assert_equal 'Name Arial Century Pemr', @tess.utf8_text.strip

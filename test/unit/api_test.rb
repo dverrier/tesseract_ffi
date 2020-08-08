@@ -68,7 +68,7 @@ class TestAPI < MiniTest::Test
     assert_equal 'eng+lav', tess.tess_get_init_languages_as_string(@handle)
     tess.recognize
     TesseractFFI.tess_delete(@handle)
-    assert_equal '', tess.errors
+    assert_equal [], tess.errors
     assert_equal 'ABCD', tess.utf8_text
   end
 
@@ -89,7 +89,7 @@ class TestAPI < MiniTest::Test
     tess.expects(:tess_get_hocr).with(@handle,0).returns('<html></html>')
     tess.recognize
     TesseractFFI.tess_delete(@handle)
-    assert_equal '', tess.errors
+    assert_equal [], tess.errors
     assert_equal '<html></html>', tess.hocr_text
   end
 
@@ -113,19 +113,19 @@ class TestAPI < MiniTest::Test
 
     tess.recognize_rectangle(1,2,3,4)
     TesseractFFI.tess_delete(@handle)
-    assert_equal '', tess.errors
+    assert_equal [], tess.errors
     assert_equal '<html></html>', tess.hocr_text
   end
 
 
   def test_oem
     tess =  TesseractFFI::Tesseract.new(file_name: @image_name)
-    assert_equal TesseractFFI::Default, tess.oem
-    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy)
+    assert_equal TesseractFFI::DEFAULT, tess.oem
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LEGACY)
     assert_equal 0, tess.oem
     tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LTSM)
     assert_equal 1, tess.oem
-    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::Legacy_LTSM)
+    tess =  TesseractFFI::Tesseract.new(file_name: @image_name, oem: TesseractFFI::LEGACY_LTSM)
     assert_equal 2, tess.oem
   end
 end

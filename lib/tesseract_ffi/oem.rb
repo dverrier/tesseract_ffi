@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module TesseractFFI
+  # module OEM
   module OEM
     def oem
       ocr_engine_mode = nil

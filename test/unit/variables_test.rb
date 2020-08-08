@@ -11,7 +11,7 @@ class TestVariableGetSet < MiniTest::Test
     tess.setup do 
       var_value = tess.get_double_variable(var_name) 
       assert_equal '0.15', var_value.to_s
-      assert_equal '', tess.errors
+      assert_equal [], tess.errors
     end
   end
 
@@ -21,7 +21,7 @@ class TestVariableGetSet < MiniTest::Test
     tess.setup do
       result = tess.set_variable(var_name, '0.2') 
       assert result
-      assert_equal '', tess.errors
+      assert_equal [], tess.errors
     end
   end
 
