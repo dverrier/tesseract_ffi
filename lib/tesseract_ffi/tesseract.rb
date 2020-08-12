@@ -68,17 +68,27 @@ module TesseractFFI
       end
     end
 
-    # rubocop:disable Naming/MethodParameterName
-    def set_rectangle(x, y, w, h)
-      tess_set_rectangle(@handle, x, y, w, h)
+    def set_rectangle(x_coord, y_coord, width, height)
+      tess_set_rectangle(@handle, x_coord, y_coord, width, height)
     end
 
-    def recognize_rectangle(x, y, w, h)
+    def recognize_rectangle(x_coord, y_coord, width, height)
       setup do
-        set_rectangle(x, y, w, h)
+        set_rectangle(x_coord, y_coord, width, height)
         ocr
       end
     end
-    # rubocop:enable Naming/MethodParameterName
+
+    def recognize_rectangles(rectangle_list)
+      texts = []
+      setup do
+        rectangle_list.each do |r|
+          set_rectangle(r[0], r[1], r[2], r[3])
+          ocr
+          texts << @utf8_text.strip
+        end
+      end
+      texts
+    end
   end
 end
