@@ -158,5 +158,21 @@ class TestException < MiniTest::Test
     end
     assert_equal ['Tesseract Error Unable to print variables to NOTHING'], tess.errors
   end
+
+  def test_rectangles_argument_list_error
+    tess = TesseractFFI::Tesseract.new(file_name: @image_name)
+    assert_raises TesseractFFI::TessException do
+      tess.recognize_rectangles({})
+    end
+    assert_equal ['Tess Error Argument must be a list'], tess.errors
+  end
+
+  def test_rectangles_argument_content_error
+    tess = TesseractFFI::Tesseract.new(file_name: @image_name)
+    assert_raises TesseractFFI::TessException do
+      tess.recognize_rectangles([1, 2, 3])
+    end
+    assert_equal ['Tesseract Error Argument must be a list of 4-arrays'], tess.errors
+  end
 end
 # rubocop:enable Metrics/ClassLength, Metrics/MethodLength, Metrics/AbcSize

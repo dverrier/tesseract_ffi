@@ -79,10 +79,23 @@ module TesseractFFI
       end
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def recognize_rectangles(rectangle_list)
+      unless rectangle_list.is_a?(Array) && rectangle_list.length.positive?
+        msg = 'Tess Error Argument must be a list'
+        # copy the error message as we are not going to Setup
+        @errors << msg
+        raise TessException.new(error_msg: msg)
+      end
+
       texts = []
       setup do
         rectangle_list.each do |r|
+          unless r.is_a?(Array) && rectangle_list.length > 3
+            msg = 'Argument must be a list of 4-arrays'
+            raise TessException.new(error_msg: msg)
+          end
+
           set_rectangle(r[0], r[1], r[2], r[3])
           ocr
           texts << @utf8_text.strip
@@ -90,5 +103,6 @@ module TesseractFFI
       end
       texts
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   end
 end
