@@ -49,7 +49,7 @@ module TesseractFFI
       tess_set_source_resolution(@handle, @source_resolution)
       raise TessException.new(error_msg: 'Recognition Error') if tess_recognize(@handle, 0) != 0
 
-      @utf8_text = ''
+      @utf8_text = nil
       text = tess_get_utf8(@handle, 0)
       @utf8_text = text.encode('UTF-8') if text
       @hocr_text = tess_get_hocr(@handle, 0)
