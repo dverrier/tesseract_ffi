@@ -6,6 +6,7 @@ module TesseractFFI
     include TesseractFFI
     include ConfVars
     include OEM
+    include Rectangles
 
     attr_accessor :language, :file_name, :source_resolution
     attr_reader :utf8_text, :hocr_text, :errors
@@ -67,42 +68,5 @@ module TesseractFFI
         TesseractFFI.tess_process_pages(@handle, @file_name, nil, 5000, pdf_renderer)
       end
     end
-
-    def set_rectangle(x_coord, y_coord, width, height)
-      tess_set_rectangle(@handle, x_coord, y_coord, width, height)
-    end
-
-    def recognize_rectangle(x_coord, y_coord, width, height)
-      setup do
-        set_rectangle(x_coord, y_coord, width, height)
-        ocr
-      end
-    end
-
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-    def recognize_rectangles(rectangle_list)
-      unless rectangle_list.is_a?(Array) && rectangle_list.length.positive?
-        msg = 'Tess Error Argument must be a list'
-        # copy the error message as we are not going to Setup
-        @errors << msg
-        raise TessException.new(error_msg: msg)
-      end
-
-      texts = []
-      setup do
-        rectangle_list.each do |r|
-          unless r.is_a?(Array) && rectangle_list.length > 3
-            msg = 'Argument must be a list of 4-arrays'
-            raise TessException.new(error_msg: msg)
-          end
-
-          set_rectangle(r[0], r[1], r[2], r[3])
-          ocr
-          texts << @utf8_text.strip
-        end
-      end
-      texts
-    end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   end
 end

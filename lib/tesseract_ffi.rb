@@ -2,8 +2,9 @@
 
 require 'ffi'
 require 'tesseract_ffi/version'
-require 'tesseract_ffi/conf_vars' # mix-in to tesseract
-require 'tesseract_ffi/oem' # mix-in to tesseract
+require 'tesseract_ffi/conf_vars'   # mix-in to tesseract
+require 'tesseract_ffi/oem'         # mix-in to tesseract
+require 'tesseract_ffi/rectangles'  # mix-in to tesseract
 require 'tesseract_ffi/tesseract'
 require 'tesseract_ffi/tess_exception'
 require 'tesseract_ffi/quick'

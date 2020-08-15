@@ -10,7 +10,7 @@ class TestRectangles < MiniTest::Test
 
   def test_rectangles_recognition
     correct_texts = %w[Name Arial Century Peter]
-    # [[x,y,w,h]]
+    # [[x, y, w, h]]
     rectangles = [
       [0, 4, 49, 13],
       [54, 4, 44, 13],
