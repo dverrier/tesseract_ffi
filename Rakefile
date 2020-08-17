@@ -19,6 +19,12 @@ Rake::TestTask.new(:test_units) do |test|
   test.verbose = true
 end
 
+Rake::TestTask.new(:bench) do |test|
+  test.libs << 'lib' << 'test'
+  test.pattern = 'test/performance/*_bench.rb'
+  test.verbose = true
+end
+
 task :default => :test
 
 

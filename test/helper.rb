@@ -18,6 +18,7 @@ rescue Bundler::BundlerError => e
 end
 require 'minitest'
 require 'minitest/autorun'
+require "minitest/benchmark"
 
 require 'mocha/minitest'
 require 'tesseract_ffi'
