@@ -17,6 +17,7 @@ module TesseractFFI
     # rubocop:disable Metrics/MethodLength
     def recognize_rectangles(rectangle_list)
       @texts = []
+      @rectangle_list = nil
       if valid_rectangle_list? rectangle_list
         @rectangle_list = rectangle_list
         setup do
@@ -26,8 +27,6 @@ module TesseractFFI
             @texts << @utf8_text.strip
           end
         end
-      else
-        @rectangle_list = nil
       end
       @texts
     end

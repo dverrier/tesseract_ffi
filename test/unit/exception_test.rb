@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 require 'helper'
+# override the logger to keep the console clean
+class TesseractFFI::Tesseract
+  def log(msg);  end
+end
 
 # rubocop:disable Metrics/ClassLength, Metrics/MethodLength, Metrics/AbcSize
 class TestException < MiniTest::Test

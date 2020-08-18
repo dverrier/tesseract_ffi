@@ -12,15 +12,21 @@ module TesseractFFI
     attr_reader :utf8_text, :hocr_text, :errors
 
     def initialize(file_name: nil, language: 'eng', source_resolution: 72, oem: DEFAULT)
-      @language = language
-      raise TessException.new(error_msg: 'file_name must be provided') unless file_name
-
-      raise TessException.new(error_msg: "File #{file_name} not found") unless File.exist? file_name
+      unless file_name.is_a?(String) && File.exist?(file_name)
+        log 'Error: Tesseract needs a file ' + (file_name || 'no name given')
+        raise TessException.new(error_msg: 'file_name must be provided')
+      end
 
       @file_name = file_name
+      @language = language
       @source_resolution = source_resolution
       @oem = oem
       @errors = []
+    end
+
+    # just output to console
+    def log(msg)
+      puts msg
     end
 
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -38,6 +44,7 @@ module TesseractFFI
       yield # run the block for recognition etc
     rescue TessException => e
       @errors << "Tesseract Error #{e.error[:error_msg]}"
+      log @errors
       raise
     ensure
       tess_end(@handle)
