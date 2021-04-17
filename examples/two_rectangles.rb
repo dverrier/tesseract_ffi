@@ -1,7 +1,7 @@
 require 'tesseract_ffi'
 tess = TesseractFFI::Tesseract.new( 
       file_name: 'test/images/4words.png', 
-      source_resolution:96)
+      source_resolution:300)
 
 tess.setup do
   # x,y,w,h

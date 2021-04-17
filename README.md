@@ -18,7 +18,7 @@ tesseract 4.1.1-rc2-25-g9707
  Found SSE
  Found libarchive 3.1.2
 ```
-Don't know about Windows, apart from the Windows Subsystem for Linux works really well!
+Don't know about Windows, apart from the Windows Subsystem for Linux works really well! This also need Imagemagick to be installed (used for splitting pdfs).
 
 
 
