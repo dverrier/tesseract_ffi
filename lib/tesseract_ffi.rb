@@ -29,7 +29,7 @@ module TesseractFFI
     layout :value, :double
   end
 
-  ffi_lib '/usr/lib/x86_64-linux-gnu/libtesseract.so'
+  ffi_lib '/usr/lib/x86_64-linux-gnu/libtesseract.so.4'
 
   attach_function :version, 'TessVersion', [], :string
   attach_function :tess_create, 'TessBaseAPICreate', [], :pointer

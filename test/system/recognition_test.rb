@@ -19,7 +19,7 @@ class TestTextRecognition < MiniTest::Test
     @tess.recognize
     r = HocrReader::Reader.new(@tess.hocr_text)
     r.to_words
-    assert_equal 'Name Arial Century Peter ', r.convert_to_string
+    assert_equal 'Name Arial Century Peter ', r.to_s
   end
 
   def test_rectangle_recognition
