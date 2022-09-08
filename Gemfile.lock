@@ -31,7 +31,7 @@ DEPENDENCIES
   awesome_print
   ffi
   hocr_reader
-  minitest (~> 5.0)
+  minitest (~> 5.16.0)
   mocha (~> 1.14.0)
   nokogiri (~> 1.13.8)
   rake

@@ -25,13 +25,13 @@ Gem::Specification.new do |spec|
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
-  spec.add_dependency "ffi"
+  spec.add_dependency "ffi", "~> 1.15.5"
 
-  spec.add_development_dependency "minitest", "~> 5.15.1"
+  spec.add_development_dependency "minitest", "~> 5.16.1"
   spec.add_development_dependency "mocha", "~> 1.14.0"
   spec.add_development_dependency "simplecov", "~> 0.18.5"
   spec.add_development_dependency "awesome_print", "> 1.8.0"
-  spec.add_development_dependency "nokogiri","> 1.13.3"
+  spec.add_development_dependency "nokogiri","> 1.13.6"
 
   spec.bindir        = "bin"
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
