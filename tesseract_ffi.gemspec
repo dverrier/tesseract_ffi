@@ -27,11 +27,11 @@ Gem::Specification.new do |spec|
   end
   spec.add_dependency "ffi"
 
-  spec.add_development_dependency "minitest", "~> 5.14.1"
-  spec.add_development_dependency "mocha", "~> 1.11.2"
+  spec.add_development_dependency "minitest", "~> 5.15.1"
+  spec.add_development_dependency "mocha", "~> 1.14.0"
   spec.add_development_dependency "simplecov", "~> 0.18.5"
   spec.add_development_dependency "awesome_print", "> 1.8.0"
-  spec.add_development_dependency "nokogiri","> 1.10.10"
+  spec.add_development_dependency "nokogiri","> 1.13.3"
 
   spec.bindir        = "bin"
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

@@ -11,8 +11,8 @@ group :dev, :test do
 end
 
 group :test do
-  gem 'minitest'
-  gem 'mocha'
-  gem 'nokogiri'
+  gem 'minitest', "~> 5.0"
+  gem 'mocha', "~> 1.14.0"
+  gem 'nokogiri', "~> 1.13.8"
   gem 'simplecov', require: false
 end
