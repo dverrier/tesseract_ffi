@@ -2,5 +2,5 @@
 
 # module with version
 module TesseractFFI
-  VERSION = '0.9.0'
+  VERSION = '0.9.1'
 end
